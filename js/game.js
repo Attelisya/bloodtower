@@ -195,16 +195,11 @@ class Game {
         
         // Если наступила ночь, сбрасываем эффекты
         if (this.isNight) {
-            // Сбрасываем эффекты отравления, опьянения и защиты у всех игроков
+            // Сбрасываем эффекты отравления и защиты у всех игроков
             this.players.forEach(player => {
                 if (player.poisoned) {
                     player.poisoned = false;
                     this.addToLog(`${player.name} больше не отравлен (эффект истек)`, 'player');
-                }
-                
-                if (player.drunk) {
-                    player.drunk = false;
-                    this.addToLog(`${player.name} больше не пьян (эффект истек)`, 'player');
                 }
                 
                 if (player.protected) {
