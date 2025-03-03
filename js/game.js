@@ -371,17 +371,6 @@ class Game {
                     demonCount = 1;
                 }
         }
-
-        // Проверяем наличие Барона среди игроков
-        const hasBaron = this.players.some(player => 
-            player.character && player.character.id === 18
-        );
-
-        // Если Барон в игре, корректируем количество горожан и чужаков
-        if (hasBaron) {
-            townfolkCount -= 2;
-            outsiderCount += 2;
-        }
         
         return {
             total: playerCount,
