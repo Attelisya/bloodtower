@@ -466,23 +466,25 @@ class UI {
         const shuffledMinions = this.shuffleArray(minionRoles);
         const shuffledDemons = this.shuffleArray(demonRoles);
 
+        // Сначала выбираем миньонов и демонов
+        const selectedMinions = shuffledMinions.slice(0, roleCounts.minions);
+        const selectedDemons = shuffledDemons.slice(0, roleCounts.demons);
+
         // Проверяем, есть ли Барон среди выбранных миньонов
-        const baronIndex = shuffledMinions.findIndex(role => role.id === 18);
+        const hasBaronInGame = selectedMinions.some(role => role.id === 18);
         let townfolkCount = roleCounts.townfolk;
         let outsiderCount = roleCounts.outsiders;
 
         // Если Барон будет в игре, корректируем количество горожан и чужаков
-        if (baronIndex !== -1 && baronIndex < roleCounts.minions) {
+        if (hasBaronInGame) {
             townfolkCount -= 2;
             outsiderCount += 2;
             this.game.addToLog('Барон в игре: +2 чужака, -2 горожанина', 'system');
         }
         
-        // Выбираем нужное количество ролей из каждой категории
+        // Теперь выбираем горожан и чужаков с учетом эффекта Барона
         const selectedGood = shuffledGood.slice(0, townfolkCount);
         const selectedOutsiders = shuffledOutsiders.slice(0, outsiderCount);
-        const selectedMinions = shuffledMinions.slice(0, roleCounts.minions);
-        const selectedDemons = shuffledDemons.slice(0, roleCounts.demons);
         
         // Объединяем все выбранные роли
         const allSelectedRoles = [
