@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кровь на часовой башне</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Экран загрузки -->
+    <div id="start-screen" class="screen">
+        <div class="start-container">
+            <div class="game-title">Кровь на часовой башне</div>
+            <div class="game-subtitle">инструмент для модератора</div>
+            
+            <div class="start-buttons">
+                <button id="start-new-game" class="btn btn-primary">Новая игра</button>
+                <button id="load-game" class="btn">Загрузить игру</button>
+                <button id="roles-guide" class="btn" onclick="window.location.href='roles.html'">Справочник ролей</button>
+                <button id="about-game" class="btn">О игре</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Экран настройки игры -->
+    <div id="setup-screen" class="screen" style="display: none;">
+        <div class="setup-container">
+            <h1>Настройка игры</h1>
+            
+            <div class="setup-section">
+                <h3>Выберите сценарий</h3>
+                <select id="scenario-select" class="select-input">
+                    <option value="Неприятности назревают">Неприятности назревают</option>
+                </select>
+            </div>
+            
+            <div class="setup-section">
+                <h3>Список игроков</h3>
+                <div class="players-input-container">
+                    <div id="players-list">
+                        <!-- Список игроков будет добавлен динамически -->
+                    </div>
+                    <button id="add-player" class="btn">Добавить игрока</button>
+                </div>
+            </div>
+            
+            <div class="setup-section">
+                <h3>Способ распределения ролей</h3>
+                <div class="roles-assignment-options">
+                    <div class="radio-option">
+                        <input type="radio" id="roles-auto" name="roles-assignment" value="auto" checked>
+                        <label for="roles-auto">Автоматически</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="roles-semi-manual" name="roles-assignment" value="semi-manual">
+                        <label for="roles-semi-manual">Полуручной (выбор ролей)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="roles-manual" name="roles-assignment" value="manual">
+                        <label for="roles-manual">Ручной (распределение каждому игроку)</label>
+                    </div>
+                </div>
+                
+                <div id="semi-manual-roles-container" class="roles-container" style="display: none;">
+                    <p>Выберите роли, которые будут участвовать в игре:</p>
+                    
+                    <div id="role-selection-container" class="role-selection">
+                        <!-- Список ролей будет добавлен динамически -->
+                    </div>
+                    
+                    <div class="roles-counter">
+                        <p>Выбрано ролей: <span id="selected-roles-count">0</span> из <span id="required-roles-count">0</span></p>
+                    </div>
+                </div>
+                
+                <div id="manual-roles-container" class="roles-container" style="display: none;">
+                    <p>Назначьте роль каждому игроку:</p>
+                    
+                    <div id="player-roles-selection" class="player-roles-selection">
+                        <!-- Список игроков с выбором ролей будет добавлен динамически -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-actions">
+                <button id="back-to-start" class="btn">Назад</button>
+                <button id="start-game-btn" class="btn btn-primary">Начать игру</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Экран игры -->
+    <div id="game-screen" class="screen" style="display: none;">
+        <div class="game-container">
+            <div class="game-header">
+                <h1>Гримуар</h1>
+                <div class="game-controls">
+                    <div class="day-counter" id="day-counter">День 1</div>
+                    <button id="day-night-toggle" class="btn btn-toggle">Переключить на ночь</button>
+                    <button id="show-log" class="btn">Показать журнал</button>
+                    <button id="clear-log" class="btn">Очистить журнал</button>
+                    <button id="show-timer" class="btn">Показать таймер</button>
+                </div>
+            </div>
+            
+            <div class="game-content">
+                <div id="players-grimoire" class="players-grimoire">
+                    <!-- Список игроков будет добавлен динамически -->
+                </div>
+                
+                <div id="game-log" class="game-log" style="display: none;">
+                    <div class="log-header">
+                        <h3>Журнал событий</h3>
+                        <button id="close-log" class="btn-close">&times;</button>
+                    </div>
+                    <div id="game-log-content" class="log-content">
+                        <!-- Журнал событий будет добавлен динамически -->
+                    </div>
+                </div>
+                
+                <div id="timer-container" class="timer-container" style="display: none;">
+                    <div class="timer-header">
+                        <h3>Таймер обсуждения</h3>
+                        <button id="close-timer" class="btn-close">&times;</button>
+                    </div>
+                    <div class="timer-display">
+                        <div id="timer-time" class="timer-time">05:00</div>
+                        <div class="timer-controls">
+                            <button id="timer-start" class="btn btn-primary">Старт</button>
+                            <button id="timer-stop" class="btn">Стоп</button>
+                            <button id="timer-reset" class="btn">Сброс</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-footer">
+                <button id="back-to-setup" class="btn">Назад к настройкам</button>
+                <button id="save-game" class="btn">Сохранить игру</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно управления игроком -->
+    <div id="player-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="player-modal-title">Управление игроком</h3>
+                <button id="close-player-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="player-info">
+                    <div class="player-info-field">
+                        <label>Роль:</label>
+                        <span id="player-modal-role">-</span>
+                    </div>
+                    <div class="player-info-field">
+                        <label>Команда:</label>
+                        <span id="player-modal-alignment">-</span>
+                    </div>
+                    <div class="player-info-field">
+                        <label>Способность:</label>
+                        <p id="player-modal-ability">-</p>
+                    </div>
+                </div>
+                
+                <div class="player-controls">
+                    <h4>Управление эффектами</h4>
+                    <div class="player-control-buttons">
+                        <button id="toggle-dead" class="btn btn-control">Убить</button>
+                        <button id="toggle-poisoned" class="btn btn-control">Отравить</button>
+                        <button id="toggle-drunk" class="btn btn-control">Опьянить</button>
+                        <button id="toggle-protected" class="btn btn-control">Защитить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно "О игре" -->
+    <div id="about-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>О игре "Кровь на часовой башне"</h3>
+                <button id="close-about-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Кровь на часовой башне (Blood on the Clocktower) - это социальная дедуктивная игра, в которой игроки принимают на себя роли жителей городка, который атакуют демоны.</p>
+                
+                <h4>Как играть</h4>
+                <p>Каждая игра состоит из серии дней и ночей. В течение дня игроки обсуждают, кто может быть демоном или его миньоном, и голосуют за то, кого казнить. Ночью добрые персонажи получают информацию, а злые — используют свои способности.</p>
+                
+                <h4>Справка по сценариям</h4>
+                <ul>
+                    <li><strong>Пивоварение (Trouble Brewing)</strong> - базовый сценарий, рекомендуемый для новичков.</li>
+                    <li><strong>Восход кровавой луны (Bad Moon Rising)</strong> - сценарий с упором на смерть и воскрешение.</li>
+                    <li><strong>Тайные сумерки (Sects & Violets)</strong> - сценарий с акцентом на безумие и иллюзии.</li>
+                </ul>
+                
+                <p class="about-footer">Этот инструмент предназначен для модераторов игры и помогает отслеживать статусы персонажей.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Подключение JavaScript -->
+    <script src="js/scenarios.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/roles-manager.js"></script>
+    <script src="js/modal-manager.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html> 

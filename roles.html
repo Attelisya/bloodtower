@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кровавая башня - Справочник ролей</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/roles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="roles-screen">
+        <header class="roles-header">
+            <h1 class="main-title">Справочник ролей</h1>
+            <p class="subtitle">Сценарий "Неприятности назревают"</p>
+            
+            <div class="search-container">
+                <input type="text" id="role-search" class="role-search" placeholder="Поиск роли...">
+            </div>
+        </header>
+        
+        <main class="roles-container">
+            <!-- Добрые роли -->
+            <section id="townfolk-section" class="role-category good-category">
+                <h2 class="category-title">
+                    <i class="fas fa-users category-icon"></i>Горожане
+                </h2>
+                <div id="townfolk-grid" class="roles-grid"></div>
+            </section>
+            
+            <!-- Чужаки -->
+            <section id="outsider-section" class="role-category good-category">
+                <h2 class="category-title">
+                    <i class="fas fa-user-tag category-icon"></i>Чужаки
+                </h2>
+                <div id="outsider-grid" class="roles-grid"></div>
+            </section>
+            
+            <!-- Прислужники -->
+            <section id="minion-section" class="role-category evil-category">
+                <h2 class="category-title">
+                    <i class="fas fa-user-ninja category-icon"></i>Прислужники
+                </h2>
+                <div id="minion-grid" class="roles-grid"></div>
+            </section>
+            
+            <!-- Демоны -->
+            <section id="demon-section" class="role-category evil-category">
+                <h2 class="category-title">
+                    <i class="fas fa-dragon category-icon"></i>Демоны
+                </h2>
+                <div id="demon-grid" class="roles-grid"></div>
+            </section>
+        </main>
+        
+        <footer class="roles-footer">
+            <a href="index.html" class="btn">Вернуться на главную</a>
+        </footer>
+    </div>
+    
+    <!-- Модальное окно для детальной информации о роли -->
+    <div id="role-modal" class="role-modal">
+        <div class="role-modal-content">
+            <div class="role-modal-header">
+                <h3 class="role-modal-title">Название роли</h3>
+                <span class="role-modal-alignment">Добрый</span>
+                <span class="role-modal-close">&times;</span>
+            </div>
+            <div class="role-modal-body">
+                <span class="role-modal-category">Категория</span>
+                <h4 class="role-modal-ability-title">Способность:</h4>
+                <p class="role-modal-ability">Описание способности</p>
+                
+                <div class="role-modal-timing">
+                    <span class="timing-tag first-night">Первая ночь</span>
+                    <span class="timing-tag other-night">Другие ночи</span>
+                    <span class="timing-tag passive">Пассивно</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Подключение скриптов -->
+    <script src="js/scenarios.js"></script>
+    <script src="js/roles.js"></script>
+</body>
+</html> 

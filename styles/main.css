@@ -1,0 +1,347 @@
+:root {
+    --primary-color: #8b0000;
+    --secondary-color: #4a0000;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --card-background: #fff;
+    --good-color: #2c7bb6;
+    --evil-color: #d7191c;
+    --neutral-color: #ababab;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+}
+
+.game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.game-section {
+    display: none;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.game-section.active {
+    display: block;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+h3 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.setup-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.option-group {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.scenario-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.scenario-buttons button {
+    background-color: #e0e0e0;
+    color: var(--text-color);
+}
+
+.scenario-buttons button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.player-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.player-count button {
+    background-color: var(--secondary-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+#player-count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.primary-button {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    align-self: center;
+    margin-top: 1rem;
+}
+
+.secondary-button {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.player-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.player-card.good {
+    border-left: 4px solid var(--good-color);
+}
+
+.player-card.evil {
+    border-left: 4px solid var(--evil-color);
+}
+
+.player-card.neutral {
+    border-left: 4px solid var(--neutral-color);
+}
+
+.player-status {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.player-status.alive {
+    background-color: #4caf50;
+}
+
+.player-status.dead {
+    background-color: #f44336;
+}
+
+.night-day-toggle {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.night-day-toggle button {
+    flex: 1;
+    background-color: #e0e0e0;
+    color: var(--text-color);
+}
+
+.night-day-toggle button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.game-info {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+}
+
+.grimoire {
+    margin-bottom: 2rem;
+}
+
+.game-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#log-entries {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+}
+
+.log-entry {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.grimoire-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+#character-list {
+    list-style: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.character-item {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.character-item.good {
+    background-color: rgba(44, 123, 182, 0.1);
+    border-left: 3px solid var(--good-color);
+}
+
+.character-item.evil {
+    background-color: rgba(215, 25, 28, 0.1);
+    border-left: 3px solid var(--evil-color);
+}
+
+.character-item.neutral {
+    background-color: rgba(171, 171, 171, 0.1);
+    border-left: 3px solid var(--neutral-color);
+}
+
+.player-role-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 0.75rem;
+}
+
+.player-role-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.player-role-info {
+    flex: 1;
+}
+
+.player-role-character {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 768px) {
+    .game-board {
+        grid-template-columns: 1fr;
+    }
+    
+    .grimoire-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .scenario-buttons {
+        flex-direction: column;
+    }
+    
+    .scenario-buttons button {
+        width: 100%;
+    }
+} 
