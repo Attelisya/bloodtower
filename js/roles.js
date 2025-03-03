@@ -201,11 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
                 
-                // Добавляем обработчик для открытия модального окна
-                card.addEventListener('click', function() {
-                    openRoleModal(role);
-                });
-                
                 // Добавляем карточку в контейнер
                 container.appendChild(card);
             } catch (error) {

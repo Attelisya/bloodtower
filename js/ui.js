@@ -202,30 +202,37 @@ class UI {
     }
     
     /**
-     * Создает карточку игрока
-     * @param {Object} player Игрок
-     * @returns {HTMLElement} Карточка игрока
+     * Создает элемент карточки игрока для гримуара
+     * @param {Object} player Объект игрока
+     * @returns {HTMLElement} Элемент карточки
      */
     createPlayerCard(player) {
-        // Контейнер карточки
         const card = document.createElement('div');
         card.className = 'player-role-item';
         card.dataset.playerId = player.id;
         
+        // Добавляем классы для состояний игрока
         if (!player.alive) {
-            card.classList.add('player-dead');
+            card.classList.add('dead-player');
         }
         
         if (player.poisoned) {
-            card.classList.add('player-poisoned');
+            card.classList.add('poisoned-player');
         }
         
         if (player.drunk) {
-            card.classList.add('player-drunk');
+            card.classList.add('drunk-player');
         }
         
         if (player.protected) {
-            card.classList.add('player-protected');
+            card.classList.add('protected-player');
+        }
+        
+        // Добавляем класс для команды (добрый/злой)
+        if (player.alignment === 'good') {
+            card.classList.add('good');
+        } else if (player.alignment === 'evil') {
+            card.classList.add('evil');
         }
         
         // Имя игрока
@@ -235,17 +242,10 @@ class UI {
         
         // Роль игрока
         const roleDiv = document.createElement('div');
-        roleDiv.className = 'player-role';
+        roleDiv.className = 'player-role-character';
         
         if (player.character) {
             roleDiv.textContent = player.character.name;
-            
-            // Добавляем класс в зависимости от типа персонажа
-            if (player.alignment === 'good') {
-                card.classList.add('player-good');
-            } else if (player.alignment === 'evil') {
-                card.classList.add('player-evil');
-            }
         } else {
             roleDiv.textContent = '—';
         }
@@ -254,31 +254,40 @@ class UI {
         const statusDiv = document.createElement('div');
         statusDiv.className = 'player-status';
         
-        const statusIcons = [];
-        
+        // Добавляем индикаторы статусов
         if (!player.alive) {
-            statusIcons.push('☠');
+            const deadStatus = document.createElement('span');
+            deadStatus.className = 'status-indicator status-dead';
+            deadStatus.textContent = 'Мертв';
+            statusDiv.appendChild(deadStatus);
         }
         
         if (player.poisoned) {
-            statusIcons.push('🧪');
+            const poisonedStatus = document.createElement('span');
+            poisonedStatus.className = 'status-indicator status-poisoned';
+            poisonedStatus.textContent = 'Отравлен';
+            statusDiv.appendChild(poisonedStatus);
         }
         
         if (player.drunk) {
-            statusIcons.push('🍺');
+            const drunkStatus = document.createElement('span');
+            drunkStatus.className = 'status-indicator status-drunk';
+            drunkStatus.textContent = 'Пьян';
+            statusDiv.appendChild(drunkStatus);
         }
         
         if (player.protected) {
-            statusIcons.push('🛡');
+            const protectedStatus = document.createElement('span');
+            protectedStatus.className = 'status-indicator status-protected';
+            protectedStatus.textContent = 'Защищен';
+            statusDiv.appendChild(protectedStatus);
         }
-        
-        statusDiv.textContent = statusIcons.join(' ');
         
         // Собираем карточку
         card.appendChild(nameDiv);
         card.appendChild(roleDiv);
         
-        if (statusIcons.length > 0) {
+        if (statusDiv.children.length > 0) {
             card.appendChild(statusDiv);
         }
         
@@ -294,44 +303,70 @@ class UI {
         
         if (card) {
             // Обновляем классы состояния
-            card.classList.toggle('player-dead', !player.alive);
-            card.classList.toggle('player-poisoned', player.poisoned);
-            card.classList.toggle('player-drunk', player.drunk);
-            card.classList.toggle('player-protected', player.protected);
+            card.classList.toggle('dead-player', !player.alive);
+            card.classList.toggle('poisoned-player', player.poisoned);
+            card.classList.toggle('drunk-player', player.drunk);
+            card.classList.toggle('protected-player', player.protected);
+            
+            // Обновляем классы для команды
+            card.classList.toggle('good', player.alignment === 'good');
+            card.classList.toggle('evil', player.alignment === 'evil');
+            
+            // Обновляем роль, если она изменилась
+            const roleDiv = card.querySelector('.player-role-character');
+            if (roleDiv) {
+                if (player.character) {
+                    roleDiv.textContent = player.character.name;
+                } else {
+                    roleDiv.textContent = '—';
+                }
+            }
             
             // Обновляем статусы
-            const statusDiv = card.querySelector('.player-status') || document.createElement('div');
-            statusDiv.className = 'player-status';
+            let statusDiv = card.querySelector('.player-status');
+            if (!statusDiv) {
+                statusDiv = document.createElement('div');
+                statusDiv.className = 'player-status';
+                card.appendChild(statusDiv);
+            }
             
-            const statusIcons = [];
+            // Очищаем текущие статусы
+            statusDiv.innerHTML = '';
             
+            // Добавляем индикаторы статусов
             if (!player.alive) {
-                statusIcons.push('☠');
+                const deadStatus = document.createElement('span');
+                deadStatus.className = 'status-indicator status-dead';
+                deadStatus.textContent = 'Мертв';
+                statusDiv.appendChild(deadStatus);
             }
             
             if (player.poisoned) {
-                statusIcons.push('🧪');
+                const poisonedStatus = document.createElement('span');
+                poisonedStatus.className = 'status-indicator status-poisoned';
+                poisonedStatus.textContent = 'Отравлен';
+                statusDiv.appendChild(poisonedStatus);
             }
             
             if (player.drunk) {
-                statusIcons.push('🍺');
+                const drunkStatus = document.createElement('span');
+                drunkStatus.className = 'status-indicator status-drunk';
+                drunkStatus.textContent = 'Пьян';
+                statusDiv.appendChild(drunkStatus);
             }
             
             if (player.protected) {
-                statusIcons.push('🛡');
+                const protectedStatus = document.createElement('span');
+                protectedStatus.className = 'status-indicator status-protected';
+                protectedStatus.textContent = 'Защищен';
+                statusDiv.appendChild(protectedStatus);
             }
             
-            statusDiv.textContent = statusIcons.join(' ');
-            
-            if (statusIcons.length > 0) {
-                if (!card.querySelector('.player-status')) {
-                    card.appendChild(statusDiv);
-                }
+            // Показываем или скрываем контейнер статусов
+            if (statusDiv.children.length > 0) {
+                statusDiv.style.display = 'flex';
             } else {
-                const existingStatusDiv = card.querySelector('.player-status');
-                if (existingStatusDiv) {
-                    card.removeChild(existingStatusDiv);
-                }
+                statusDiv.style.display = 'none';
             }
         } else {
             // Если карточка не найдена, обновляем весь список
@@ -690,4 +725,276 @@ function addDynamicStyles() {
 // Экспорт класса UI не требуется в браузере
 // if (typeof module !== 'undefined') {
 //     module.exports = { UI };
-// } 
+// }
+
+/**
+ * Обновляет список выбора ролей на основе выбранного сценария
+ * @param {string} scenarioId ID сценария
+ */
+function updateRoleSelectionList(scenarioId) {
+    const scenario = window.SCENARIOS[scenarioId];
+    if (!scenario) return;
+    
+    const roleSelectionContainer = document.getElementById('role-selection-container');
+    roleSelectionContainer.innerHTML = '';
+    
+    // Создаем контейнеры для категорий ролей
+    const categories = [
+        { type: 'good', title: 'Добрые жители', roles: scenario.good || [] },
+        { type: 'outsider', title: 'Чужаки', roles: scenario.outsiders || [] },
+        { type: 'minion', title: 'Приспешники', roles: scenario.minions || [] },
+        { type: 'demon', title: 'Демоны', roles: scenario.demons || [] }
+    ];
+    
+    // Количество выбранных ролей
+    const roleCounts = document.createElement('div');
+    roleCounts.className = 'role-counts mb-3';
+    
+    const goodCount = document.createElement('span');
+    goodCount.className = 'role-count';
+    goodCount.id = 'good-count';
+    goodCount.textContent = 'Добрые: 0';
+    
+    const evilCount = document.createElement('span');
+    evilCount.className = 'role-count';
+    evilCount.id = 'evil-count';
+    evilCount.textContent = 'Злые: 0';
+    
+    const totalCount = document.createElement('span');
+    totalCount.className = 'role-count';
+    totalCount.id = 'total-count';
+    totalCount.textContent = 'Всего: 0';
+    
+    roleCounts.appendChild(goodCount);
+    roleCounts.appendChild(evilCount);
+    roleCounts.appendChild(totalCount);
+    roleSelectionContainer.appendChild(roleCounts);
+    
+    // Создаем категории ролей
+    categories.forEach(category => {
+        if (category.roles.length === 0) return;
+        
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = `role-category ${category.type}`;
+        
+        const categoryTitle = document.createElement('div');
+        categoryTitle.className = 'role-category-title';
+        categoryTitle.textContent = category.title;
+        categoryDiv.appendChild(categoryTitle);
+        
+        category.roles.forEach(role => {
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.className = 'role-checkbox';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `role-${role.id}`;
+            checkbox.value = role.id;
+            checkbox.dataset.roleType = category.type;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `role-${role.id}`;
+            label.textContent = role.name;
+            
+            // Добавляем значок для первой ночи, если роль активна в первую ночь
+            if (role.firstNight) {
+                const firstNightBadge = document.createElement('span');
+                firstNightBadge.className = 'badge badge-info ml-2';
+                firstNightBadge.title = 'Активен в первую ночь';
+                firstNightBadge.innerHTML = '1';
+                label.appendChild(firstNightBadge);
+            }
+            
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+            categoryDiv.appendChild(checkboxContainer);
+            
+            // Добавляем описание роли
+            if (role.description) {
+                const description = document.createElement('div');
+                description.className = 'role-description';
+                description.textContent = role.description;
+                categoryDiv.appendChild(description);
+            }
+            
+            // Добавляем обработчик события для подсчета выбранных ролей
+            checkbox.addEventListener('change', updateSelectedRolesCount);
+        });
+        
+        roleSelectionContainer.appendChild(categoryDiv);
+    });
+    
+    // Инициализируем счетчики
+    updateSelectedRolesCount();
+}
+
+/**
+ * Обновляет счетчики выбранных ролей
+ */
+function updateSelectedRolesCount() {
+    const goodRoles = document.querySelectorAll('input[data-role-type="good"]:checked').length;
+    const outsiderRoles = document.querySelectorAll('input[data-role-type="outsider"]:checked').length;
+    const minionRoles = document.querySelectorAll('input[data-role-type="minion"]:checked').length;
+    const demonRoles = document.querySelectorAll('input[data-role-type="demon"]:checked').length;
+    
+    const totalGood = goodRoles + outsiderRoles;
+    const totalEvil = minionRoles + demonRoles;
+    const total = totalGood + totalEvil;
+    
+    document.getElementById('good-count').textContent = `Добрые: ${totalGood}`;
+    document.getElementById('evil-count').textContent = `Злые: ${totalEvil}`;
+    document.getElementById('total-count').textContent = `Всего: ${total}`;
+    
+    // Меняем цвет счетчиков в зависимости от баланса
+    const goodCountElement = document.getElementById('good-count');
+    const evilCountElement = document.getElementById('evil-count');
+    
+    if (totalGood > 0 && totalEvil > 0) {
+        const ratio = totalGood / totalEvil;
+        
+        if (ratio < 1.5) {
+            goodCountElement.style.color = '#ffcc00'; // Предупреждение - мало добрых
+        } else if (ratio > 3.5) {
+            evilCountElement.style.color = '#ffcc00'; // Предупреждение - мало злых
+        } else {
+            goodCountElement.style.color = '';
+            evilCountElement.style.color = '';
+        }
+    }
+}
+
+/**
+ * Добавляет запись в лог событий игры
+ * @param {string} message Сообщение
+ * @param {string} type Тип события (player-added, player-removed, status-changed, day-night, game-start)
+ */
+function addLogEntry(message, type = '') {
+    const gameLog = document.getElementById('game-log');
+    if (!gameLog) return;
+    
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${type}`;
+    
+    // Добавляем метку времени
+    const time = document.createElement('span');
+    time.className = 'time';
+    const now = new Date();
+    time.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+    
+    // Добавляем сообщение
+    const messageSpan = document.createElement('span');
+    messageSpan.className = 'message';
+    messageSpan.textContent = message;
+    
+    entry.appendChild(time);
+    entry.appendChild(messageSpan);
+    gameLog.appendChild(entry);
+    
+    // Прокручиваем лог до последней записи
+    gameLog.scrollTop = gameLog.scrollHeight;
+}
+
+/**
+ * Создает кнопку действия с современным стилем
+ * @param {string} text Текст кнопки
+ * @param {string} cssClass Дополнительный CSS класс
+ * @param {Function} clickHandler Обработчик клика
+ * @param {string} icon HTML-код иконки (опционально)
+ * @returns {HTMLElement} Кнопка
+ */
+function createActionButton(text, cssClass, clickHandler, icon = '') {
+    const button = document.createElement('button');
+    button.className = `action-btn ${cssClass}`;
+    
+    // Добавляем иконку, если она указана
+    if (icon) {
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'icon';
+        iconSpan.innerHTML = icon;
+        button.appendChild(iconSpan);
+    }
+    
+    const textSpan = document.createElement('span');
+    textSpan.textContent = text;
+    button.appendChild(textSpan);
+    
+    button.addEventListener('click', clickHandler);
+    return button;
+}
+
+/**
+ * Обновляет отображение кнопок действий для выбранного игрока
+ * @param {Object} player Выбранный игрок
+ * @param {Object} game Текущая игра
+ */
+function updatePlayerActions(player, game) {
+    const actionsContainer = document.getElementById('player-actions');
+    if (!actionsContainer) return;
+    
+    actionsContainer.innerHTML = '';
+    
+    if (!player) {
+        actionsContainer.innerHTML = '<p class="text-muted">Выберите игрока для отображения действий</p>';
+        return;
+    }
+    
+    // Кнопки для изменения статуса жизни
+    if (player.alive) {
+        const killButton = createActionButton('Убить', 'kill', () => {
+            game.killPlayer(player.id);
+            addLogEntry(`Игрок ${player.name} убит.`, 'status-changed');
+        }, '☠');
+        actionsContainer.appendChild(killButton);
+    } else {
+        const reviveButton = createActionButton('Воскресить', 'revive', () => {
+            game.revivePlayer(player.id);
+            addLogEntry(`Игрок ${player.name} воскрешен.`, 'status-changed');
+        }, '⚕');
+        actionsContainer.appendChild(reviveButton);
+    }
+    
+    // Кнопки для эффекта отравления
+    if (player.poisoned) {
+        const unpoisonButton = createActionButton('Убрать отравление', 'unpoison', () => {
+            game.setPoisoned(player.id, false);
+            addLogEntry(`С игрока ${player.name} снят эффект отравления.`, 'status-changed');
+        }, '💊');
+        actionsContainer.appendChild(unpoisonButton);
+    } else {
+        const poisonButton = createActionButton('Отравить', 'poison', () => {
+            game.setPoisoned(player.id, true);
+            addLogEntry(`Игрок ${player.name} отравлен.`, 'status-changed');
+        }, '🧪');
+        actionsContainer.appendChild(poisonButton);
+    }
+    
+    // Кнопки для эффекта опьянения
+    if (player.drunk) {
+        const soberButton = createActionButton('Отрезвить', 'sober', () => {
+            game.setDrunk(player.id, false);
+            addLogEntry(`С игрока ${player.name} снят эффект опьянения.`, 'status-changed');
+        }, '🍵');
+        actionsContainer.appendChild(soberButton);
+    } else {
+        const drunkButton = createActionButton('Напоить', 'drunk', () => {
+            game.setDrunk(player.id, true);
+            addLogEntry(`Игрок ${player.name} пьян.`, 'status-changed');
+        }, '🍺');
+        actionsContainer.appendChild(drunkButton);
+    }
+    
+    // Кнопки для эффекта защиты
+    if (player.protected) {
+        const unprotectButton = createActionButton('Снять защиту', 'unprotect', () => {
+            game.setProtected(player.id, false);
+            addLogEntry(`С игрока ${player.name} снята защита.`, 'status-changed');
+        }, '🛑');
+        actionsContainer.appendChild(unprotectButton);
+    } else {
+        const protectButton = createActionButton('Защитить', 'protect', () => {
+            game.setProtected(player.id, true);
+            addLogEntry(`Игрок ${player.name} защищен.`, 'status-changed');
+        }, '🛡');
+        actionsContainer.appendChild(protectButton);
+    }
+} 
